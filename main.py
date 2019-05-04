@@ -2,12 +2,13 @@ import person
 import fieldgen
 import constants
 import functions
+import item
 import os
 
 
 def draw_field(f, *objects):
-    for pos in objects:
-        Field.field[pos[0]][pos[1]] = "@"
+    for object in objects:
+        Field.field[object[0][0]][object[0][1]] = object[1]
 
     for row in f:
         for tile in row:
@@ -44,9 +45,9 @@ def equip_item(slot=None, item=None):
     player.equip_item(item, slot)
 
 
-player = person.Person("player", 18, 180, [0, 0])
+player = person.Person("player", 18, 180, [0, 0], "@")
+sword = item.Item("Sword", [1, 1], "I", 6, "A sword")
 player.add_item(
-    "weapon",
     "hat",
     "robe",
     "boots",
@@ -57,11 +58,12 @@ player.add_item(
 Field = fieldgen.Field(5, 3, constants.empty_terrain)
 field_empty = Field.copy_field()
 
+
 end_game = False
 while not end_game:
     os.system('cls')
     Field.field = Field.replace_field(field_empty)
-    draw_field(Field.field, player.position)
+    draw_field(Field.field, [player.position, player.icon], [sword.position, sword.icon])
 
     # Even listening
     action = input().lower().split(' ')

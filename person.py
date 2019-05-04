@@ -1,6 +1,6 @@
 class Person:
 
-    def __init__(self, name, age, length, position):
+    def __init__(self, name, age, length, position, icon):
 
         self.name = name
         self.age = age
@@ -15,6 +15,7 @@ class Person:
         }
         self.inventory = []
         self.position = position
+        self.icon = icon
 
     def add_item(self, *args):
 
