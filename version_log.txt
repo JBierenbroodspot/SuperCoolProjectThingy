@@ -1,0 +1,6 @@
+Version 0.01:
+- Allow movement of player
+- Allow checking of equipment
+- Allow checking of inventory
+- Allow equipping of items
+- Allow exiting of game
