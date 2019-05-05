@@ -1,6 +1,10 @@
-Version 0.01:
+Version 0.1:
 - Allow movement of player
 - Allow checking of equipment
 - Allow checking of inventory
 - Allow equipping of items
 - Allow exiting of game
+Version 0.1.1:
+- Add items which are drawn on map
+Version 0.1.2:
+- Add multiple commands on single line
