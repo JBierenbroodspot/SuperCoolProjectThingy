@@ -35,6 +35,7 @@ def move(f, p, a):
         p[1] += 1
         if p[1] > x:
             p[1] = x
+    return p
 
 
 def equip_item(slot=None, item=None):
@@ -66,27 +67,28 @@ while not end_game:
     draw_field(Field.field, [player.position, player.icon], [sword.position, sword.icon])
 
     # Even listening
-    action = input().lower().split(' ')
-    if action[0] in ["w", "a", "s", "d"]:
-        os.system('cls')
-        move(Field.field, player.position, action[0])
-    if action[0] in ["i", "inv", "inventory"]:
-        os.system('cls')
-        player.check_inventory()
-        functions.wait()
-    if action[0] in ["equipment", "eq"]:
-        os.system('cls')
-        player.check_equipment()
-        functions.wait()
-    if action[0] in ['equip']:  # equip slot item
-        os.system('cls')
-        if 1 < len(action):
-            if 2 < len(action):
-                player.equip_item(action[2], action[1])
+    actions = input().lower().split(' ')
+    for action in actions:
+        if action in ["w", "a", "s", "d"]:
+            os.system('cls')
+            move(Field.field, player.position, action[0])
+        if action in ["i", "inv", "inventory"]:
+            os.system('cls')
+            player.check_inventory()
+            functions.wait()
+        if action in ["equipment", "eq"]:
+            os.system('cls')
+            player.check_equipment()
+            functions.wait()
+        if action in ['equip']:  # equip slot item
+            os.system('cls')
+            if 1 < len(actions):
+                if 2 < len(actions):
+                    player.equip_item(actions[2], actions[1])
+                else:
+                    equip_item(actions[1])
             else:
-                equip_item(action[1])
-        else:
-            equip_item()
-        functions.wait()
-    if action[0] in ["exit", "quit"]:
-        end_game = True
+                equip_item()
+            functions.wait()
+        if action in ["exit", "quit"]:
+            end_game = True
