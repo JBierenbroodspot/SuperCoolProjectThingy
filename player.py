@@ -1,4 +1,4 @@
-class Person:
+class Player:
 
     def __init__(self, name, age, length, position, icon):
 

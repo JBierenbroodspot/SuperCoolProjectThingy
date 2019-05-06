@@ -1,5 +1,6 @@
-import person
+import player
 import fieldgen
+import creature
 import constants
 import functions
 import item
@@ -18,26 +19,26 @@ def draw_field(f, objects):
         print("\n")
 
 
-def move(f, p, a):
+def move(f, moved, a):
     x = len(f[0]) - 1
     y = len(f) - 1
     if a == "w":
-        p.position[0] -= 1
-        if p.position[0] < 0:
-            p.position[0] = 0
+        moved.position[0] -= 1
+        if moved.position[0] < 0:
+            moved.position[0] = 0
     elif a == "s":
-        p.position[0] += 1
-        if p.position[0] > y:
-            p.position[0] = y
+        moved.position[0] += 1
+        if moved.position[0] > y:
+            moved.position[0] = y
     elif a == "a":
-        p.position[1] -= 1
-        if p.position[1] < 0:
-            p.position[1] = 0
+        moved.position[1] -= 1
+        if moved.position[1] < 0:
+            moved.position[1] = 0
     elif a == "d":
-        p.position[1] += 1
-        if p.position[1] > x:
-            p.position[1] = x
-    return p.position
+        moved.position[1] += 1
+        if moved.position[1] > x:
+            moved.position[1] = x
+    return moved.position
 
 
 def equip_item(slot=None, item=None):
@@ -53,14 +54,17 @@ def check_status(objects):
     for obj in objects:
         if obj != iterobj:
             if iterobj.position == obj.position:
-                obj.pick_up(iterobj)
-                object_list.remove(obj)
+                if issubclass(type(obj), item.Item):
+                    obj.pick_up(iterobj)
+                    object_list.remove(obj)
 
 
-player = person.Person("player", 18, 180, [0, 0], "@")
+player = player.Player("player", 18, 180, [0, 0], "@")
 sword = item.Item("Sword", [1, 1], "I", 6, "A sword")
+orc = creature.Creature("Orc", "Orc", 10, [2, 2], "O")
 object_list.append(player)
 object_list.append(sword)
+object_list.append(orc)
 player.add_item(
     "hat",
     "robe",
