@@ -2,7 +2,7 @@
 
 Launch game by running(double clicking) main.py.
 Every command has to be followed by a return.
-You can input any combination of commands as long as they are seperated
+You can input any combination of commands as long as they are separated
 by a space.
 
 ##### Controls #####
@@ -36,3 +36,4 @@ exit => Exit game
 - PC can view items in inventory and equipped items
 - PC can equip items
 - User can input multiple commands in a single line
+- PC can pick up items drawn on map

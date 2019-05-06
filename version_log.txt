@@ -5,6 +5,10 @@ Version 0.1:
 - Allow equipping of items
 - Allow exiting of game
 Version 0.1.1:
-- Add items which are drawn on map
+- Add new item class
+- Add icon to existing player class
+- Add drawing of multiple objects
 Version 0.1.2:
 - Add multiple commands on single line
+Version 0.2:
+- Add picking of item objects

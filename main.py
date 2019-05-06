@@ -5,10 +5,12 @@ import functions
 import item
 import os
 
+object_list = []
 
-def draw_field(f, *objects):
-    for object in objects:
-        Field.field[object[0][0]][object[0][1]] = object[1]
+
+def draw_field(f, objects):
+    for obj in objects:
+        Field.field[obj.position[0]][obj.position[1]] = obj.icon
 
     for row in f:
         for tile in row:
@@ -20,22 +22,22 @@ def move(f, p, a):
     x = len(f[0]) - 1
     y = len(f) - 1
     if a == "w":
-        p[0] -= 1
-        if p[0] < 0:
-            p[0] = 0
+        p.position[0] -= 1
+        if p.position[0] < 0:
+            p.position[0] = 0
     elif a == "s":
-        p[0] += 1
-        if p[0] > y:
-            p[0] = y
+        p.position[0] += 1
+        if p.position[0] > y:
+            p.position[0] = y
     elif a == "a":
-        p[1] -= 1
-        if p[1] < 0:
-            p[1] = 0
+        p.position[1] -= 1
+        if p.position[1] < 0:
+            p.position[1] = 0
     elif a == "d":
-        p[1] += 1
-        if p[1] > x:
-            p[1] = x
-    return p
+        p.position[1] += 1
+        if p.position[1] > x:
+            p.position[1] = x
+    return p.position
 
 
 def equip_item(slot=None, item=None):
@@ -46,8 +48,19 @@ def equip_item(slot=None, item=None):
     player.equip_item(item, slot)
 
 
+def check_status(objects):
+    iterobj = next(iter(objects))
+    for obj in objects:
+        if obj != iterobj:
+            if iterobj.position == obj.position:
+                obj.pick_up(iterobj)
+                object_list.remove(obj)
+
+
 player = person.Person("player", 18, 180, [0, 0], "@")
 sword = item.Item("Sword", [1, 1], "I", 6, "A sword")
+object_list.append(player)
+object_list.append(sword)
 player.add_item(
     "hat",
     "robe",
@@ -64,14 +77,14 @@ end_game = False
 while not end_game:
     os.system('cls')
     Field.field = Field.replace_field(field_empty)
-    draw_field(Field.field, [player.position, player.icon], [sword.position, sword.icon])
+    draw_field(Field.field, object_list)
 
     # Even listening
     actions = input().lower().split(' ')
     for action in actions:
         if action in ["w", "a", "s", "d"]:
             os.system('cls')
-            move(Field.field, player.position, action[0])
+            move(Field.field, player, action[0])
         if action in ["i", "inv", "inventory"]:
             os.system('cls')
             player.check_inventory()
@@ -92,3 +105,5 @@ while not end_game:
             functions.wait()
         if action in ["exit", "quit"]:
             end_game = True
+
+        check_status(object_list)
