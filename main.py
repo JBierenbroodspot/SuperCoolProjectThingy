@@ -6,9 +6,11 @@ import functions
 import item
 import os
 
+# ========== Pre-game initialisation ========== #
 object_list = []
 
 
+# ========== Functions ========== #
 def draw_field(f, objects):
     for obj in objects:
         Field.field[obj.position[0]][obj.position[1]] = obj.icon
@@ -26,18 +28,26 @@ def move(f, moved, a):
         moved.position[0] -= 1
         if moved.position[0] < 0:
             moved.position[0] = 0
-    elif a == "s":
+        elif does_collide(object_list):
+            moved.position[0] += 1
+    elif a == "s" and not does_collide(object_list):
         moved.position[0] += 1
         if moved.position[0] > y:
             moved.position[0] = y
-    elif a == "a":
+        elif does_collide(object_list):
+            moved.position[0] -= 1
+    elif a == "a" and not does_collide(object_list):
         moved.position[1] -= 1
         if moved.position[1] < 0:
             moved.position[1] = 0
-    elif a == "d":
+        elif does_collide(object_list):
+            moved.position[1] += 1
+    elif a == "d" and not does_collide(object_list):
         moved.position[1] += 1
         if moved.position[1] > x:
             moved.position[1] = x
+        elif does_collide(object_list):
+            moved.position[1] -= 1
     return moved.position
 
 
@@ -49,16 +59,21 @@ def equip_item(slot=None, item=None):
     player.equip_item(item, slot)
 
 
-def check_status(objects):
+def does_collide(objects):
+    collision = False
     iterobj = next(iter(objects))
     for obj in objects:
-        if obj != iterobj:
-            if iterobj.position == obj.position:
+        if obj != iterobj:  # Checks if you are not comparing same objects
+            if iterobj.position == obj.position:  # Checks if any objects have the same position
+                collision = True
                 if issubclass(type(obj), item.Item):
                     obj.pick_up(iterobj)
                     object_list.remove(obj)
+                    collision = False
+    return collision
 
 
+# ========== Initialisation ========== #
 player = player.Player("player", 18, 180, [0, 0], "@")
 sword = item.Item("Sword", [1, 1], "I", 6, "A sword")
 orc = creature.Creature("Orc", "Orc", 10, [2, 2], "O")
@@ -73,10 +88,12 @@ player.add_item(
     "torch",
     "torch"
 )
-Field = fieldgen.Field(5, 3, constants.empty_terrain)
+Field = fieldgen.Field(30, 10, constants.empty_terrain)
 field_empty = Field.copy_field()
 
-
+# ========== Game loop ========== #
+# Since game doesn't use tick or frames, the game won't loop
+# unless userinput(event) is given.
 end_game = False
 while not end_game:
     os.system('cls')
@@ -89,15 +106,15 @@ while not end_game:
         if action in ["w", "a", "s", "d"]:
             os.system('cls')
             move(Field.field, player, action[0])
-        if action in ["i", "inv", "inventory"]:
+        elif action in ["i", "inv", "inventory"]:
             os.system('cls')
             player.check_inventory()
             functions.wait()
-        if action in ["equipment", "eq"]:
+        elif action in ["equipment", "eq"]:
             os.system('cls')
             player.check_equipment()
             functions.wait()
-        if action in ['equip']:  # equip slot item
+        elif action in ['equip']:  # equip slot item
             os.system('cls')
             if 1 < len(actions):
                 if 2 < len(actions):
@@ -107,7 +124,7 @@ while not end_game:
             else:
                 equip_item()
             functions.wait()
-        if action in ["exit", "quit"]:
+        elif action in ["exit", "quit"]:
             end_game = True
 
-        check_status(object_list)
+        does_collide(object_list)

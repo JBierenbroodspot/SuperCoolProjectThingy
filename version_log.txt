@@ -12,3 +12,5 @@ Version 0.1.2:
 - Add multiple commands on single line
 Version 0.2:
 - Add picking of item objects
+Version 0.2.1:
+- Add collision detection
